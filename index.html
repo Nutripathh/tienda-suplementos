@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nutripath | Tienda de Suplementos Dietarios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --amarillo:#e8efe9;
+    --azul:#3f5a4d;
+    --azul-claro:#7a9b8a;
+    --verde:#7a9b8a;
+    --gris-fondo:#faf8f4;
+    --gris-borde:#dbe3dd;
+    --texto:#2c332e;
+    --texto-suave:#5f6b64;
+    --blanco:#ffffff;
+    --rojo:#c96a4a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Inter',sans-serif;color:var(--texto);background:var(--gris-fondo);}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  .contenedor{max-width:1200px;margin:0 auto;padding:0 16px;}
+  button{cursor:pointer;font-family:inherit;border:none;}
+
+  /* TOPBAR */
+  .topbar{background:var(--azul);color:#fff;font-size:.78rem;padding:6px 0;}
+  .topbar .contenedor{display:flex;justify-content:space-between;}
+
+  /* HEADER */
+  header{background:var(--amarillo);padding:14px 0;position:sticky;top:0;z-index:100;}
+  .header-fila{display:flex;align-items:center;gap:20px;}
+  .logo{font-size:1.5rem;font-weight:700;color:var(--azul);white-space:nowrap;font-family:'Fraunces',serif;}
+  .logo span{color:var(--rojo);}
+  .buscador{
+    flex:1;display:flex;background:#fff;border-radius:4px;overflow:hidden;
+  }
+  .buscador input{
+    flex:1;border:none;padding:11px 14px;font-size:.95rem;font-family:inherit;outline:none;
+  }
+  .buscador button{background:#fff;padding:0 16px;color:var(--texto-suave);font-size:1.1rem;}
+  .header-acciones{display:flex;align-items:center;gap:20px;font-size:.85rem;font-weight:500;color:var(--azul);white-space:nowrap;}
+  .carrito-btn{position:relative;display:flex;align-items:center;gap:6px;background:none;color:var(--azul);font-weight:600;font-size:.95rem;}
+  .carrito-badge{
+    position:absolute;top:-8px;right:-10px;background:var(--rojo);color:#fff;
+    border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;
+    font-size:.7rem;font-weight:700;
+  }
+  .menu-toggle{display:none;background:none;font-size:1.6rem;color:var(--azul);}
+
+  /* CATEGORIAS NAV */
+  .cat-nav{background:#fff;border-bottom:1px solid var(--gris-borde);}
+  .cat-nav ul{display:flex;gap:26px;padding:12px 0;overflow-x:auto;}
+  .cat-nav a{font-size:.85rem;font-weight:500;color:var(--texto);white-space:nowrap;}
+  .cat-nav a:hover{color:var(--azul-claro);}
+
+  /* HERO / BANNER */
+  .banner{
+    background:linear-gradient(120deg,var(--azul) 60%,#557c6c 100%);
+    color:#fff;padding:50px 0;margin-top:16px;border-radius:8px;
+  }
+  .banner .contenedor{display:flex;align-items:center;gap:40px;flex-wrap:wrap;}
+  .banner-texto{flex:1;min-width:260px;}
+  .banner-texto span{background:var(--amarillo);color:var(--azul);font-weight:700;padding:4px 12px;border-radius:20px;font-size:.8rem;}
+  .banner-texto h1{font-size:2.1rem;margin:16px 0 10px;line-height:1.2;font-family:'Fraunces',serif;}
+  .banner-texto p{color:#d9e3dc;margin-bottom:22px;max-width:44ch;}
+  .banner-cta{background:var(--amarillo);color:var(--azul);font-weight:700;padding:13px 28px;border-radius:6px;font-size:.95rem;}
+  .banner-img{flex:1;min-width:240px;max-width:380px;border-radius:8px;overflow:hidden;aspect-ratio:4/3;}
+  .banner-img img{width:100%;height:100%;object-fit:cover;}
+
+  section{padding:36px 0;}
+  .titulo-seccion{font-size:1.4rem;font-weight:600;margin-bottom:18px;color:var(--texto);font-family:'Fraunces',serif;}
+
+  /* GRID PRODUCTOS */
+  .grid-productos{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  }
+  .producto{
+    background:#fff;border-radius:6px;padding:18px 16px 20px;
+    display:flex;flex-direction:column;position:relative;
+    transition:box-shadow .15s ease, transform .15s ease;
+  }
+  .producto:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px);}
+  .badge-oferta{
+    position:absolute;top:12px;left:12px;background:var(--verde);color:#fff;
+    font-size:.7rem;font-weight:700;padding:3px 8px;border-radius:4px;
+  }
+  .producto-img{aspect-ratio:1/1;border-radius:4px;overflow:hidden;margin-bottom:14px;background:#f5f5f5;}
+  .producto-img img{width:100%;height:100%;object-fit:cover;}
+  .producto-envio{color:var(--verde);font-size:.75rem;font-weight:600;margin-bottom:4px;}
+  .producto-nombre{font-size:.9rem;color:var(--texto);margin-bottom:8px;min-height:40px;}
+  .producto-precio-anterior{font-size:.78rem;color:var(--texto-suave);text-decoration:line-through;}
+  .producto-precio{font-size:1.3rem;font-weight:500;color:var(--texto);}
+  .producto-cuotas{font-size:.78rem;color:var(--verde);margin-bottom:12px;}
+  .producto-rating{font-size:.75rem;color:var(--texto-suave);margin-bottom:10px;}
+  .producto-rating .estrellas{color:#ffb400;}
+  .btn-agregar{
+    margin-top:auto;background:var(--azul-claro);color:#fff;padding:10px;border-radius:6px;
+    font-size:.85rem;font-weight:600;
+  }
+  .btn-agregar:hover{background:#2968c8;}
+
+  /* PILARES */
+  .pilares{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  }
+  .pilar-card{
+    background:#fff;border-radius:6px;padding:24px 18px;text-align:center;
+  }
+  .pilar-card .icono{font-size:1.8rem;margin-bottom:10px;}
+  .pilar-card h3{font-size:.95rem;margin-bottom:6px;}
+  .pilar-card p{font-size:.8rem;color:var(--texto-suave);}
+
+  /* TESTIMONIOS */
+  .testimonios-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .testimonio-card{background:#fff;border-radius:6px;padding:20px;}
+  .testimonio-card .estrellas{color:#ffb400;font-size:.85rem;margin-bottom:8px;}
+  .testimonio-card p{font-size:.85rem;color:var(--texto-suave);margin-bottom:10px;}
+  .testimonio-card span{font-size:.8rem;font-weight:600;}
+
+  /* NEWSLETTER / CONTACTO */
+  .contacto-banda{background:var(--azul);color:#fff;border-radius:8px;padding:36px 30px;text-align:center;}
+  .contacto-banda h2{font-size:1.4rem;margin-bottom:8px;font-family:'Fraunces',serif;}
+  .contacto-banda p{color:#d9e3dc;margin-bottom:20px;font-size:.9rem;}
+  .accesos-rapidos{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .acceso-rapido{
+    background:#fff;color:var(--azul);font-weight:600;padding:11px 22px;border-radius:6px;font-size:.85rem;
+  }
+  .acceso-rapido.wsp{background:#25D366;color:#fff;}
+  .acceso-rapido.ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;}
+
+  /* FOOTER */
+  footer{background:#2b2b2b;color:#bbb;padding:40px 0 20px;font-size:.82rem;margin-top:20px;}
+  .footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:24px;}
+  .footer-grid h4{color:#fff;font-size:.9rem;margin-bottom:12px;}
+  .footer-grid li{margin-bottom:8px;}
+  .footer-grid a:hover{color:#fff;}
+  .footer-bottom{border-top:1px solid #444;padding-top:16px;text-align:center;font-size:.78rem;}
+
+  /* CART DRAWER */
+  .cart-overlay{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;
+  }
+  .cart-overlay.abierto{display:block;}
+  .cart-drawer{
+    position:fixed;top:0;right:0;height:100%;width:340px;max-width:90%;background:#fff;
+    z-index:201;transform:translateX(100%);transition:transform .25s ease;
+    display:flex;flex-direction:column;
+  }
+  .cart-drawer.abierto{transform:translateX(0);}
+  .cart-header{padding:18px 20px;border-bottom:1px solid var(--gris-borde);display:flex;justify-content:space-between;align-items:center;}
+  .cart-header h3{font-size:1.05rem;}
+  .cart-header button{background:none;font-size:1.3rem;color:var(--texto-suave);}
+  .cart-body{flex:1;overflow-y:auto;padding:16px 20px;}
+  .cart-item{display:flex;gap:12px;margin-bottom:16px;align-items:center;}
+  .cart-item img{width:52px;height:52px;object-fit:cover;border-radius:4px;background:#f5f5f5;}
+  .cart-item-info{flex:1;}
+  .cart-item-info p{font-size:.82rem;margin-bottom:2px;}
+  .cart-item-info span{font-size:.8rem;color:var(--texto-suave);}
+  .cart-footer{padding:18px 20px;border-top:1px solid var(--gris-borde);}
+  .cart-total{display:flex;justify-content:space-between;font-weight:600;margin-bottom:14px;}
+  .cart-vacio{color:var(--texto-suave);font-size:.85rem;text-align:center;margin-top:30px;}
+
+  @media(max-width:900px){
+    .grid-productos{grid-template-columns:repeat(2,1fr);}
+    .pilares{grid-template-columns:repeat(2,1fr);}
+    .testimonios-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:repeat(2,1fr);}
+    .banner-texto h1{font-size:1.6rem;}
+  }
+  @media(max-width:600px){
+    .header-fila{flex-wrap:wrap;}
+    .buscador{order:3;width:100%;}
+    .cat-nav ul{gap:16px;}
+    .header-acciones span.txt-usuario{display:none;}
+    .grid-productos{grid-template-columns:repeat(2,1fr);gap:10px;}
+    .producto{padding:12px 10px 14px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== TOPBAR ===== -->
+<div class="topbar">
+  <div class="contenedor">
+    <span>Envíos a todo el país 🚚</span>
+    <span>Hasta 6 cuotas sin interés</span>
+  </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="contenedor header-fila">
+    <!-- Reemplazá "Nutripath" por el nombre de tu marca/logo -->
+    <a href="#" class="logo">Nutri<span>path</span></a>
+    <div class="buscador">
+      <input type="text" placeholder="Buscar proteínas, vitaminas, creatina...">
+      <button aria-label="Buscar">🔍</button>
+    </div>
+    <div class="header-acciones">
+      <span class="txt-usuario">Ingresá | Registrate</span>
+      <button class="carrito-btn" id="abrirCarrito">
+        🛒 Carrito <span class="carrito-badge" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== NAV CATEGORIAS ===== -->
+<nav class="cat-nav">
+  <div class="contenedor">
+    <ul>
+      <li><a href="#proteinas">Proteínas</a></li>
+      <li><a href="#vitaminas">Vitaminas y minerales</a></li>
+      <li><a href="#deportivos">Suplementos deportivos</a></li>
+      <li><a href="#bienestar">Bienestar general</a></li>
+      <li><a href="#ofertas">Ofertas</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="contenedor">
+
+  <!-- ===== BANNER ===== -->
+  <section style="padding-bottom:0;">
+    <div class="banner">
+      <div class="contenedor" style="padding:0 24px;">
+        <div class="banner-texto">
+          <span style="background:#faf8f4;color:var(--azul);">ENVÍO GRATIS +$50.000</span>
+          <!-- Editá el titular y bajada del banner principal -->
+          <h1>Todo para potenciar tu rendimiento y bienestar</h1>
+          <p>Proteínas, vitaminas y suplementos deportivos con la mejor calidad y precio. Comprá online y recibilo en tu casa.</p>
+          <a href="#proteinas" class="banner-cta">Ver productos</a>
+        </div>
+        <div class="banner-img">
+          <img src="https://images.unsplash.com/photo-1693996045300-521e9d08cabc?w=700&q=80&auto=format&fit=crop" alt="Suplemento destacado">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROTEINAS ===== -->
+  <section id="proteinas">
+    <h2 class="titulo-seccion">Proteínas más vendidas</h2>
+    <div class="grid-productos">
+
+      <div class="producto">
+        <span class="badge-oferta">-15%</span>
+        <div class="producto-img"><img src="https://images.unsplash.com/photo-1693996045300-521e9d08cabc?w=400&q=80&auto=format&fit=crop" alt="Proteína Whey Vainilla"></div>
+        <span class="producto-envio">Envío gratis</span>
+        <!-- Reemplazá nombre, precio y datos por los de tu producto real -->
+        <p class="producto-nombre">Proteína Whey Vainilla 1kg</p>
+        <span class="producto-precio-anterior">$28.000</span>
+        <span class="producto-precio">$23.800</span>
+        <span class="producto-cuotas">en 6 cuotas de $3.966</span>
+        <div class="producto-rating"><span class="estrellas">★★★★★</span> (128)</div>
+        <button class="btn-agregar" onclick="agregarCarrito('Proteína Whey Vainilla 1kg','$23.800','https://images.unsplash.com/photo-1693996045300-521e9d08cabc?w=100&q=80&auto=format&fit=crop')">Agregar al carrito</button>
+      </div>
+
+      <div class="producto">
+        <div class="producto-img"><img src="https://images.unsplash.com/photo-1556911073-a517e752729c?w=400&q=80&auto=format&fit=crop" alt="Proteína Chocolate"></div>
+        <span class="producto-envio">Envío gratis</span>
+        <p class="producto-nombre">Proteína Whey Chocolate 2kg</p>
+        <span class="producto-precio">$41.500</span>
+        <span class="producto-cuotas">en 6 cuotas de $6.916</span>
+        <div class="producto-rating"><span class="estrellas">★★★★★</span> (96)</div>
+        <button class="btn-agregar" onclick="agregarCarrito('Proteína Whey Chocolate 2kg','$41.500','https://images.unsplash.com/photo-1556911073-a517e752729c?w=100&q=80&auto=format&fit=crop')">Agregar al carrito</button>
+      </div>
+
+      <div class="producto">
+        <span class="badge-oferta">-10%</span>
+        <div class="producto-img"><img src="https://images.unsplash.com/photo-1670850756917-8ed6c2a71e12?w=400&q=80&auto=format&fit=crop" alt="Proteína Vegana"></div>
+        <span class="producto-envio">Envío gratis</span>
+        <p class="producto-nombre">Proteína Vegana Frutos Rojos 900g</p>
+        <span class="producto-precio-anterior">$26.000</span>
+        <span class="producto-precio">$23.400</span>
+        <span class="producto-cuotas">en 3 cuotas de $7.800</span>
+        <div class="producto-rating"><span class="estrellas">★★★★☆</span> (54)</div>
+        <button class="btn-agregar" onclick="agregarCarrito('Proteína Vegana Frutos Rojos 900g','$23.400','https://images.unsplash.com/photo-1670850756917-8ed6c2a71e12?w=100&q=80&auto=format&fit=crop')">Agregar al carrito</button>
+      </div>
+
+      <div class="producto">
+        <div class="producto-img"><img src="https://images.unsplash.com/photo-1664216294580-079bc527ae49?w=400&q=80&auto=format&fit=crop" alt="Proteína Isolate"></div>
+        <p class="producto-nombre">Proteína Isolate Neutra 1kg</p>
+        <span class="producto-precio">$35.900</span>
+        <span class="producto-cuotas">en 6 cuotas de $5.983</span>
+        <div class="producto-rating"><span class="estrellas">★★★★★</span> (73)</div>
+        <button class="btn-agregar" onclick="agregarCarrito('Proteína Isolate Neutra 1kg','$35.900','https://images.unsplash.com/photo-1664216294580-079bc527ae49?w=100&q=80&auto=format&fit=crop')">Agregar al carrito</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== VITAMINAS ===== -->
+  <section id="vitaminas">
+    <h2 class="titulo-seccion">Vitaminas y minerales</h2>
+    <div class="grid-productos">
+
+      <div class="producto">
+        <span class="badge-oferta">-20%</span>
+        <div class="producto-img"><img src="https://images.unsplash.com/photo-1704694671866-f83e0b91df09?w=400&q=80&auto=format&fit=crop" alt="Multivitamínico"></div>
+        <span class="producto-envio">Envío gratis</span>
+        <p class="producto-nombre">Multivitamínico Completo x60 cáps.</p>
+        <span class="producto-precio-anterior">$12.000</span>
+        <span class="producto-precio">$9.600</span>
+        <span class="producto-cuotas">en 3 cuotas de $3.200</span>
+        <div class="producto-rating"><span class="estrellas">★★★★★</span> (210)</div>
+        <button class="btn-agregar" onclick="agregarCarrito('Multivitamínico Completo x60','$9.600','https://images.unsplash.com/photo-1704694671866-f83e0b91df09?w=100&q=80&auto=format&fit=crop')">Agregar al carrito</button>
+      </div>
+
+      <div class="producto">
+        <div class="producto-img"><img src="https://images.unsplash.com/photo-1596177583101-26b7dada4f5c?w=400&q=80&auto=format&fit=crop" alt="Vitamina B12"></div>
+        <p class="producto-nombre">Vitamina B12 x90 comprimidos</p>
+        <span class="producto-precio">$7.200</span>
+        <span class="producto-cuotas">en 3 cuotas de $2.400</span>
+        <div class="producto-rating"><span class="estrellas">★★★★★</span> (88)</div>
+        <button class="btn-agregar" onclick="agregarCarrito('Vitamina B12 x90','$7.200','https://images.unsplash.com/photo-1596177583101-26b7dada4f5c?w=100&q=80&auto=format&fit=crop')">Agregar al carrito</button>
+      </div>
+
+      <div class="producto">
+        <div class="producto-img"><img src="https://images.unsplash.com/photo-1544829894-eb023ba95a38?w=400&q=80&auto=format&fit=crop" alt="Vitamina D"></div>
+        <span class="producto-envio">Envío gratis</span>
+        <p class="producto-nombre">Vitamina D3 2000UI x60 cáps.</p>
+        <span class="producto-precio">$8.900</span>
+        <span class="producto-cuotas">en 3 cuotas de $2.966</span>
+        <div class="producto-rating"><span class="estrellas">★★★★☆</span> (65)</div>
+        <button class="btn-agregar" onclick="agregarCarrito('Vitamina D3 2000UI x60','$8.900','https://images.unsplash.com/photo-1544829894-eb023ba95a38?w=100&q=80&auto=format&fit=crop')">Agregar al carrito</button>
+      </div>
+
+      <div class="producto">
+        <span class="badge-oferta">-12%</span>
+        <div class="producto-img"><img src="https://images.unsplash.com/photo-1664216294573-b28282de564b?w=400&q=80&auto=format&fit=crop" alt="Omega 3"></div>
+        <p class="producto-nombre">Omega 3 1000mg x120 perlas</p>
+        <span class="producto-precio-anterior">$15.500</span>
+        <span class="producto-precio">$13.640</span>
+        <span class="producto-cuotas">en 6 cuotas de $2.273</span>
+        <div class="producto-rating"><span class="estrellas">★★★★★</span> (142)</div>
+        <button class="btn-agregar" onclick="agregarCarrito('Omega 3 1000mg x120','$13.640','https://images.unsplash.com/photo-1664216294573-b28282de564b?w=100&q=80&auto=format&fit=crop')">Agregar al carrito</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== SUPLEMENTOS DEPORTIVOS ===== -->
+  <section id="deportivos">
+    <h2 class="titulo-seccion">Suplementos deportivos</h2>
+    <div class="grid-productos">
+
+      <div class="producto">
+        <div class="producto-img"><img src="https://images.unsplash.com/photo-1693996045435-af7c48b9cafb?w=400&q=80&auto=format&fit=crop" alt="Creatina Monohidratada"></div>
+        <span class="producto-envio">Envío gratis</span>
+        <p class="producto-nombre">Creatina Monohidratada 300g</p>
+        <span class="producto-precio">$18.900</span>
+        <span class="producto-cuotas">en 6 cuotas de $3.150</span>
+        <div class="producto-rating"><span class="estrellas">★★★★★</span> (176)</div>
+        <button class="btn-agregar" onclick="agregarCarrito('Creatina Monohidratada 300g','$18.900','https://images.unsplash.com/photo-1693996045435-af7c48b9cafb?w=100&q=80&auto=format&fit=crop')">Agregar al carrito</button>
+      </div>
+
+      <div class="producto">
+        <span class="badge-oferta">-8%</span>
+        <div class="producto-img"><img src="https://images.unsplash.com/photo-1596177582967-a5d143a41237?w=400&q=80&auto=format&fit=crop" alt="Pre-entreno"></div>
+        <p class="producto-nombre">Pre-Entreno Energizante 300g</p>
+        <span class="producto-precio-anterior">$22.000</span>
+        <span class="producto-precio">$20.240</span>
+        <span class="producto-cuotas">en 3 cuotas de $6.746</span>
+        <div class="producto-rating"><span class="estrellas">★★★★☆</span> (61)</div>
+        <button class="btn-agregar" onclick="agregarCarrito('Pre-Entreno Energizante 300g','$20.240','https://images.unsplash.com/photo-1596177582967-a5d143a41237?w=100&q=80&auto=format&fit=crop')">Agregar al carrito</button>
+      </div>
+
+      <div class="producto">
+        <div class="producto-img"><img src="https://images.unsplash.com/photo-1664786908163-85ca46f85138?w=400&q=80&auto=format&fit=crop" alt="BCAA"></div>
+        <span class="producto-envio">Envío gratis</span>
+        <p class="producto-nombre">BCAA 2:1:1 x120 cáps.</p>
+        <span class="producto-precio">$16.300</span>
+        <span class="producto-cuotas">en 3 cuotas de $5.433</span>
+        <div class="producto-rating"><span class="estrellas">★★★★★</span> (99)</div>
+        <button class="btn-agregar" onclick="agregarCarrito('BCAA 2:1:1 x120','$16.300','https://images.unsplash.com/photo-1664786908163-85ca46f85138?w=100&q=80&auto=format&fit=crop')">Agregar al carrito</button>
+      </div>
+
+      <div class="producto">
+        <div class="producto-img"><img src="https://images.unsplash.com/photo-1664216294384-28118448d7b0?w=400&q=80&auto=format&fit=crop" alt="Glutamina"></div>
+        <p class="producto-nombre">Glutamina Pura 500g</p>
+        <span class="producto-precio">$14.700</span>
+        <span class="producto-cuotas">en 3 cuotas de $4.900</span>
+        <div class="producto-rating"><span class="estrellas">★★★★☆</span> (40)</div>
+        <button class="btn-agregar" onclick="agregarCarrito('Glutamina Pura 500g','$14.700','https://images.unsplash.com/photo-1664216294384-28118448d7b0?w=100&q=80&auto=format&fit=crop')">Agregar al carrito</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== BIENESTAR / PILARES ===== -->
+  <section id="bienestar">
+    <h2 class="titulo-seccion">¿Por qué comprar en Nutripath?</h2>
+    <div class="pilares">
+      <div class="pilar-card">
+        <div class="icono">🚚</div>
+        <h3>Envío a todo el país</h3>
+        <p>Recibí tu pedido en la puerta de tu casa en 24/48hs.</p>
+      </div>
+      <div class="pilar-card">
+        <div class="icono">✅</div>
+        <h3>Productos certificados</h3>
+        <p>Marcas con registro sanitario y control de calidad.</p>
+      </div>
+      <div class="pilar-card">
+        <div class="icono">💳</div>
+        <h3>Hasta 6 cuotas</h3>
+        <p>Pagá como quieras, sin interés en tarjetas seleccionadas.</p>
+      </div>
+      <div class="pilar-card">
+        <div class="icono">💬</div>
+        <h3>Asesoramiento</h3>
+        <p>Te ayudamos a elegir el suplemento ideal para tu objetivo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIOS ===== -->
+  <section id="ofertas">
+    <h2 class="titulo-seccion">Lo que dicen nuestros clientes</h2>
+    <div class="testimonios-grid">
+      <!-- Reemplazá por opiniones reales de tus clientes -->
+      <div class="testimonio-card">
+        <div class="estrellas">★★★★★</div>
+        <p>"Llegó súper rápido y el producto es tal cual la descripción. Volvería a comprar."</p>
+        <span>— Cliente verificado</span>
+      </div>
+      <div class="testimonio-card">
+        <div class="estrellas">★★★★★</div>
+        <p>"Excelente atención, me asesoraron para elegir la proteína correcta para mi objetivo."</p>
+        <span>— Cliente verificado</span>
+      </div>
+      <div class="testimonio-card">
+        <div class="estrellas">★★★★☆</div>
+        <p>"Buena relación precio-calidad, el envío tardó un poco más de lo esperado."</p>
+        <span>— Cliente verificado</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACTO ===== -->
+  <section id="contacto">
+    <div class="contacto-banda">
+      <h2>¿Tenés dudas sobre qué suplemento elegir?</h2>
+      <p>Escribinos y te asesoramos sin costo.</p>
+      <div class="accesos-rapidos">
+        <!-- Reemplazá el número de WhatsApp -->
+        <a class="acceso-rapido wsp" href="https://wa.me/5491122702187" target="_blank" rel="noopener">📱 WhatsApp</a>
+        <!-- Reemplazá tu usuario de Instagram -->
+        <a class="acceso-rapido ig" href="https://instagram.com/guillee_ggg" target="_blank" rel="noopener">📷 Instagram</a>
+        <a class="acceso-rapido" href="mailto:contacto@nutripath.com">✉️ Email</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="contenedor">
+    <div class="footer-grid">
+      <div>
+        <h4>Nutripath</h4>
+        <ul>
+          <li><a href="#">Sobre nosotros</a></li>
+          <li><a href="#">Trabajá con nosotros</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Categorías</h4>
+        <ul>
+          <li><a href="#proteinas">Proteínas</a></li>
+          <li><a href="#vitaminas">Vitaminas</a></li>
+          <li><a href="#deportivos">Deportivos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Ayuda</h4>
+        <ul>
+          <li><a href="#">Medios de pago</a></li>
+          <li><a href="#">Envíos</a></li>
+          <li><a href="#">Cambios y devoluciones</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Seguinos</h4>
+        <ul>
+          <li><a href="https://instagram.com/guillee_ggg" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://wa.me/5491122702187" target="_blank" rel="noopener">WhatsApp</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <!-- Reemplazá por tu razón social / año -->
+      © 2026 Nutripath — Todos los derechos reservados
+    </div>
+  </div>
+</footer>
+
+<!-- ===== CARRITO (drawer) ===== -->
+<div class="cart-overlay" id="cartOverlay" onclick="cerrarCarrito()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3>Mi carrito</h3>
+    <button onclick="cerrarCarrito()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <p class="cart-vacio">Tu carrito está vacío</p>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total"><span>Total</span><span id="cartTotal">$0</span></div>
+    <button class="btn-agregar" onclick="alert('Conectar este botón a tu pasarela de pago (Mercado Pago, Stripe, etc).')">Finalizar compra</button>
+  </div>
+</div>
+
+<script>
+  // --- Carrito simple en memoria (no usa localStorage) ---
+  let carrito = [];
+
+  function formatearPrecio(n){
+    return '$' + n.toLocaleString('es-AR');
+  }
+  function parsearPrecio(str){
+    return parseInt(str.replace(/[^0-9]/g,''),10);
+  }
+
+  function agregarCarrito(nombre, precio, img){
+    carrito.push({nombre, precio, img});
+    actualizarCarrito();
+    abrirCarrito();
+  }
+
+  function actualizarCarrito(){
+    document.getElementById('cartCount').textContent = carrito.length;
+    const body = document.getElementById('cartBody');
+    if(carrito.length === 0){
+      body.innerHTML = '<p class="cart-vacio">Tu carrito está vacío</p>';
+    } else {
+      body.innerHTML = carrito.map((item, i) => `
+        <div class="cart-item">
+          <img src="${item.img}" alt="${item.nombre}">
+          <div class="cart-item-info">
+            <p>${item.nombre}</p>
+            <span>${item.precio}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+    const total = carrito.reduce((acc, item) => acc + parsearPrecio(item.precio), 0);
+    document.getElementById('cartTotal').textContent = formatearPrecio(total);
+  }
+
+  function abrirCarrito(){
+    document.getElementById('cartDrawer').classList.add('abierto');
+    document.getElementById('cartOverlay').classList.add('abierto');
+  }
+  function cerrarCarrito(){
+    document.getElementById('cartDrawer').classList.remove('abierto');
+    document.getElementById('cartOverlay').classList.remove('abierto');
+  }
+  document.getElementById('abrirCarrito').addEventListener('click', abrirCarrito);
+</script>
+
+</body>
+</html>
